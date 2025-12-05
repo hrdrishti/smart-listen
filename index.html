@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Voice Command - Listen Mode</title>
+  <style>
+    body {
+      font-family: Arial;
+      margin: 40px;
+      text-align: center;
+    }
+    #text {
+      width: 80%;
+      height: 120px;
+      font-size: 18px;
+      padding: 10px;
+      margin-top: 20px;
+    }
+    #status {
+      margin-top: 15px;
+      font-size: 18px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🎤 Smart Voice Command ("listen")</h2>
+  <textarea id="text" placeholder="Say: 'listen ...'"></textarea>
+  <div id="status">Initializing microphone…</div>
+
+  <script>
+    const text = document.getElementById("text");
+    const status = document.getElementById("status");
+
+    const SpeechRecognition = 
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Your browser does not support Speech Recognition.");
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-IN";       // For Indian English
+    recognition.continuous = true;    // Keep listening forever
+    recognition.interimResults = false;
+
+    // Start listening automatically
+    window.onload = () => {
+      recognition.start();
+      status.innerText = "Listening… Say 'listen' + your message";
+    };
+
+    // Restart automatically if stopped
+    recognition.onend = () => {
+      recognition.start();
+    };
+
+    recognition.onresult = (event) => {
+      let speech = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+      console.log("Heard:", speech);
+
+      // Check if the user said "listen"
+      if (speech.startsWith("listen")) {
+        let output = speech.replace("listen", "").trim(); // everything after "listen"
+
+        // Only update if something is spoken after "listen"
+        if (output.length > 0) {
+          text.value = output;
+          status.innerText = "Captured after 'listen': " + output;
+        } else {
+          status.innerText = "You said only 'listen', waiting for more words…";
+        }
+      } else {
+        // User did NOT say "listen"
+        status.innerText = "Speech ignored (no 'listen' detected)";
+      }
+    };
+  </script>
+
+</body>
+</html>
