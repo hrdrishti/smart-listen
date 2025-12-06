@@ -50,9 +50,19 @@
       status.innerText = "Listening… Say 'listen' + your message";
     };
 
+  function safeStart() {
+    try { recognition.start(); }
+    catch(e) {
+      // Restart after Chrome finishes stopping
+      setTimeout(() => {
+        try { recognition.start(); } catch(e2) {}
+      }, 100);
+    }
+  }
+
     // Restart automatically if stopped
     recognition.onend = () => {
-      recognition.start();
+      safeStart(); // restart instantly and safely
     };
 
     recognition.onresult = (event) => {
