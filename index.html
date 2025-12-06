@@ -62,7 +62,12 @@
 
     // Restart automatically if stopped
     recognition.onend = () => {
+      console.log("end");
       safeStart(); // restart instantly and safely
+    };
+
+    recognition.onstart = () => {
+      console.log("start");
     };
 
     recognition.onresult = (event) => {
