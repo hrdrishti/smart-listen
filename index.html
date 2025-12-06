@@ -62,12 +62,12 @@
 
     // Restart automatically if stopped
     recognition.onend = () => {
-      text.value += " ended ";
+      text.value = "ended";
       recognition.start(); // restart instantly
     };
 
     recognition.onstart = () => {
-      text.value += "started";
+      text.value = "started";
     };
 
     recognition.onresult = (event) => {
