@@ -50,20 +50,20 @@
       status.innerText = "Listening… Say 'listen' + your message";
     };
 
-  function safeStart() {
-    try { recognition.start(); }
-    catch(e) {
-      // Restart after Chrome finishes stopping
-      setTimeout(() => {
-        try { recognition.start(); } catch(e2) {}
-      }, 100);
-    }
-  }
+  // function safeStart() {
+  //   try { recognition.start(); }
+  //   catch(e) {
+  //     // Restart after Chrome finishes stopping
+  //     setTimeout(() => {
+  //       try { recognition.start(); } catch(e2) {}
+  //     }, 100);
+  //   }
+  // }
 
     // Restart automatically if stopped
     recognition.onend = () => {
       text.value += " end ";
-      safeStart(); // restart instantly and safely
+      recognition.start(); // restart instantly
     };
 
     recognition.onstart = () => {
